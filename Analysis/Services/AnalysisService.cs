@@ -34,7 +34,6 @@ public class AnalysisService : IAnalysisService
 
     public async Task<Report> AnalyzeAsync(string submissionId, CancellationToken ct = default)
     {
-        // fetch metadata from filestoring
         var client = _http.CreateClient("filestoring");
         var metaResp = await client.GetAsync($"/files/{WebUtility.UrlEncode(submissionId)}/metadata", ct);
         if (!metaResp.IsSuccessStatusCode) throw new Exception("Submission not found in FileStoring");
@@ -46,7 +45,6 @@ public class AnalysisService : IAnalysisService
         var uploadedAt = root.GetProperty("uploadedAt").GetString()!;
         var fileName = root.GetProperty("fileName").GetString()!;
 
-        // get list of submissions for same assignment
         var listResp = await client.GetAsync($"/files/works/{WebUtility.UrlEncode(assignmentId)}/submissions", ct);
         listResp.EnsureSuccessStatusCode();
         var listJson = await listResp.Content.ReadAsStringAsync(ct);
@@ -68,7 +66,6 @@ public class AnalysisService : IAnalysisService
             }
         }
 
-        // try download file and build word-cloud text
         var dlResp = await client.GetAsync($"/files/{WebUtility.UrlEncode(submissionId)}/download", ct);
         string? wordCloudUrl = null;
         if (dlResp.IsSuccessStatusCode)
@@ -101,11 +98,9 @@ public class AnalysisService : IAnalysisService
         var reportId = Guid.NewGuid().ToString();
         var report = new Report(reportId, submissionId, studentName, assignmentId, isPlag, similarId, DateTime.UtcNow, Path.Combine(_reportsDir, $"{reportId}.json"), wordCloudUrl);
 
-        // write JSON file
         var json = JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true });
         await File.WriteAllTextAsync(report.ReportPath!, json, ct);
 
-        // save to DB
         await _repo.AddAsync(report, ct);
 
         return report;
@@ -114,3 +109,4 @@ public class AnalysisService : IAnalysisService
     public Task<IReadOnlyList<Report>> GetReportsByAssignmentAsync(string assignmentId, CancellationToken ct = default)
         => _repo.GetByAssignmentAsync(assignmentId, ct);
 }
+
