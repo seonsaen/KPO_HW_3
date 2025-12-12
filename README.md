@@ -112,7 +112,10 @@ curl -v http://localhost:5000/works/hw3/reports
 # 3. Получить отчет по работе
 
 ```
-
+curl http://localhost:5002/analysis/trigger \
+  -d "{
+  "submissionId": "de91c221-a913-40fb-a3e5-0d80ea8113f7"
+}"
 ```
 
 ---
@@ -120,31 +123,30 @@ curl -v http://localhost:5000/works/hw3/reports
 # 4. Получить все отчеты по заданию
 
 ```
-
+curl http://localhost:5002/analysis/reports/by-work/hw3
 ```
 
 ---
 
-# 5. Проверить список отчетов напрямую из Analysis
-
-```
-
-```
-
----
 
 # Внутренние сервисы (если нужно вызвать напрямую)
 
 ### FileStoring - загрузить файл:
 
 ```
-
+curl http://localhost:5001/files/upload \
+  -F "File=@example.txt" \
+  -F "StudentName=Ноговицын" \
+  -F "AssignmentId=hw3"
 ```
 
 ### Analysis - запустить анализ:
 
 ```
-
+curl http://localhost:5002/analysis/trigger \
+  -d "{
+  "submissionId": "de91c221-a913-40fb-a3e5-0d80ea8113f7"
+}"
 ```
 
 ---
