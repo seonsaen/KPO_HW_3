@@ -93,10 +93,10 @@ docker compose up --build
 # 1. Загрузка работы студента
 
 ```
-curl -v -X POST http://localhost:5000/submit \
-  -F "file=@test1.txt" \
-  -F "studentName=Иванов" \
-  -F "assignmentId=hw1"
+curl -v -http://localhost:5000/works/submit \
+  -F "file=@example.txt" \
+  -F "studentName=Ноговицын" \
+  -F "assignmentId=hw3"
 ```
 
 ---
@@ -104,7 +104,7 @@ curl -v -X POST http://localhost:5000/submit \
 # 2. Получить все работы по заданию
 
 ```
-curl -v http://localhost:5000/files/assignment/hw1
+curl -v http://localhost:5000/works/hw3/reports
 ```
 
 ---
@@ -112,7 +112,7 @@ curl -v http://localhost:5000/files/assignment/hw1
 # 3. Получить отчет по работе
 
 ```
-curl -v http://localhost:5000/reports/work/w_168234502
+
 ```
 
 ---
@@ -120,7 +120,7 @@ curl -v http://localhost:5000/reports/work/w_168234502
 # 4. Получить все отчеты по заданию
 
 ```
-curl -v http://localhost:5000/reports/assignment/hw1
+
 ```
 
 ---
@@ -128,7 +128,7 @@ curl -v http://localhost:5000/reports/assignment/hw1
 # 5. Проверить список отчетов напрямую из Analysis
 
 ```
-curl -v http://localhost:5002/analysis/reports
+
 ```
 
 ---
@@ -138,18 +138,13 @@ curl -v http://localhost:5002/analysis/reports
 ### FileStoring - загрузить файл:
 
 ```
-curl -v -X POST http://localhost:5001/files/upload \
-  -F "file=@test1.txt" \
-  -F "studentName=Иванов" \
-  -F "assignmentId=hw1"
+
 ```
 
 ### Analysis - запустить анализ:
 
 ```
-curl -v -X POST http://localhost:5002/analysis/trigger \
-  -H "Content-Type: application/json" \
-  -d '{"workId":"w_168234502","studentName":"Иванов","assignmentId":"hw1"}'
+
 ```
 
 ---
