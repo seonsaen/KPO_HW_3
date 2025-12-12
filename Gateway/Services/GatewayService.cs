@@ -26,7 +26,6 @@ public class GatewayService : IGatewayService
         var fsClient = _http.CreateClient("filestoring");
         var anClient = _http.CreateClient("analysis");
 
-        // Upload to filestoring
         using var content = new MultipartFormDataContent();
         var ms = new MemoryStream();
         await file.CopyToAsync(ms, ct);
@@ -41,7 +40,6 @@ public class GatewayService : IGatewayService
         uploadResp.EnsureSuccessStatusCode();
         var uploadJson = await uploadResp.Content.ReadAsStringAsync(ct);
 
-        // trigger analysis
         using var uploadDoc = JsonDocument.Parse(uploadJson);
         var submissionId = uploadDoc.RootElement.GetProperty("submissionId").GetString()!;
         var triggerPayload = JsonSerializer.SerializeToElement(new { submissionId });
@@ -49,7 +47,6 @@ public class GatewayService : IGatewayService
         triggerResp.EnsureSuccessStatusCode();
         var reportJson = await triggerResp.Content.ReadAsStringAsync(ct);
 
-        // combine into single object
         using var reportDoc = JsonDocument.Parse(reportJson);
         var combined = JsonSerializer.SerializeToElement(new
         {
@@ -69,3 +66,4 @@ public class GatewayService : IGatewayService
         return doc.RootElement.Clone();
     }
 }
+
