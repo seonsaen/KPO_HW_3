@@ -30,7 +30,7 @@
 
 ### FileStoring
 
-* принимает и сохраняет файл (`multipart/form-data`)
+* принимает и сохраняет файл
 * сохраняет метаданные в SQLite
 * отдает файлы и список работ
 
@@ -49,9 +49,9 @@
 ### Загрузка работы
 
 1. Клиент отправляет файл → Gateway
-2. Gateway → FileStoring (`files/upload`)
+2. Gateway → FileStoring
 3. FileStoring сохраняет файл и метаданные
-4. Gateway вызывает Analysis (`analysis/trigger`)
+4. Gateway вызывает Analysis
 5. Analysis получает файл и список работ из FileStoring
 6. Анализ выполняется, генерируется отчёт
 7. Gateway возвращает результат клиенту
